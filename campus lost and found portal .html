@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>found. — Campus Lost &amp; Found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#">found<em>.</em></a>
+    <div class="nav-links">
+      <a href="#board">Browse items</a>
+      <a href="#how">How it works</a>
+      <a href="#cta">Report</a>
+    </div>
+    <div class="nav-cta">
+      <button class="ghost-btn">Sign in</button>
+      <button class="pill-btn" onclick="openReport()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Report an item
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>Live feed · RKGIT</span>
+      <h1>Lost something?<br>Someone here <span class="serif">found it.</span></h1>
+      <p class="hero-sub">One shared desk for everything misplaced on campus — reported in seconds, matched automatically, reunited fast.</p>
+      <form class="hero-search" onsubmit="heroSearch(event)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="heroQ" type="text" placeholder="Try "airpods", "wallet", "chemistry book"…">
+        <button class="pill-btn accent" type="submit">Search</button>
+      </form>
+      <div class="hero-hints">
+        <span>Popular:</span>
+        <button class="hint-chip" onclick="quickSearch('airpods')">AirPods</button>
+        <button class="hint-chip" onclick="quickSearch('keys')">Keys</button>
+        <button class="hint-chip" onclick="quickSearch('bottle')">Water bottle</button>
+        <button class="hint-chip" onclick="quickSearch('id')">Student ID</button>
+      </div>
+    </div>
+    <div class="collage" aria-hidden="true">
+      <div class="polaroid p1">
+        <div class="ph">
+          <div class="fallback" style="background:linear-gradient(135deg,#c7d2fe,#818cf8)">A</div>
+          <img src="https://images.unsplash.com/photo-1586691078366-a3a0e6eee789?fm=jpg&q=80&w=800&auto=format&fit=crop" alt="" loading="lazy" onerror="this.remove()">
+        </div>
+        <div class="tag"><span class="status-dot found"></span>Found · Central Library</div>
+      </div>
+      <div class="polaroid p2">
+        <div class="ph">
+          <div class="fallback" style="background:linear-gradient(135deg,#99f6e4,#2dd4bf)">W</div>
+          <img src="https://images.thdstatic.com/productImages/3b199ad7-215c-4192-8bee-9afd58f67f2c/svn/takeya-water-bottles-50301-64_600.jpg" alt="" loading="lazy" onerror="this.remove()">
+        </div>
+        <div class="tag"><span class="status-dot found"></span>Found · Science Hall</div>
+      </div>
+      <div class="polaroid p3">
+        <div class="ph">
+          <div class="fallback" style="background:linear-gradient(135deg,#fde68a,#f59e0b)">G</div>
+          <img src="https://images.unsplash.com/photo-1764740116658-84e5566d62f2?fm=jpg&q=80&w=800&auto=format&fit=crop" alt="" loading="lazy" onerror="this.remove()">
+        </div>
+        <div class="tag"><span class="status-dot found"></span>Found · Lecture Hall B</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="wrap stats-grid reveal">
+    <div class="stat"><div class="num" data-count="12480">0</div><div class="lbl">Items logged</div></div>
+    <div class="stat"><div class="num" data-count="8962">0</div><div class="lbl">Reunited</div></div>
+    <div class="stat"><div class="num" data-count="71" data-suffix="%">0</div><div class="lbl">Match rate</div></div>
+    <div class="stat"><div class="num" data-count="2" data-prefix="~" data-suffix=" days">0</div><div class="lbl">Avg. time home</div></div>
+  </div>
+</div>
+
+<section class="board" id="board">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <h2>The <span class="serif">board</span></h2>
+        <p>Every report, one feed. Filter by what you lost — or where you found something.</p>
+      </div>
+    </div>
+
+    <div class="toolbar reveal">
+      <div class="seg" id="typeSeg">
+        <button class="active" data-tab="all">All</button>
+        <button data-tab="lost">Lost</button>
+        <button data-tab="found">Found</button>
+      </div>
+      <div class="board-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="boardQ" type="text" placeholder="Search the board…" oninput="state.q=this.value;render()">
+      </div>
+    </div>
+
+    <div class="cat-scroll reveal" id="catRow"></div>
+    <div class="result-line" id="resultLine"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <h2>Three steps, <span class="serif">one reunion.</span></h2>
+        <p>No bulletin boards, no lost-property shoeboxes. Just a desk that never closes.</p>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="idx">STEP / 01</div>
+        <h3>Report in 60 seconds</h3>
+        <p>Snap a photo, drop a pin on where it was lost or found, add a line of detail. That's the whole form.</p>
+        <div class="ghost-num">1</div>
+      </div>
+      <div class="step reveal" style="transition-delay:.08s">
+        <div class="idx">STEP / 02</div>
+        <h3>We do the matching</h3>
+        <p>New reports are checked against everything open on the board. Likely owners get a quiet email, not a public callout.</p>
+        <div class="ghost-num">2</div>
+      </div>
+      <div class="step reveal" style="transition-delay:.16s">
+        <div class="idx">STEP / 03</div>
+        <h3>Reunite at the desk</h3>
+        <p>Verify with your student ID, pick up from the hold location, close the loop. Most items are home within two days.</p>
+        <div class="ghost-num">3</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="cta">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Someone on campus is<br><span class="serif">looking for it right now.</span></h2>
+      <p>Found something between classes? Sixty seconds of your day could save someone else's entire week.</p>
+      <button class="pill-btn" onclick="openReport()">Report a found item</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="logo" href="#">found<em>.</em></a>
+        <p>The official lost &amp; found desk of RKGIT. Run by Student Services, powered by people who pick things up.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Portal</h4>
+          <a href="#board">Browse items</a>
+          <a href="#how">How it works</a>
+          <a href="#cta">Report an item</a>
+        </div>
+        <div class="foot-col">
+          <h4>Campus</h4>
+          <a href="#">Student Services</a>
+          <a href="#">Campus Security</a>
+          <a href="#">Hold locations</a>
+        </div>
+        <div class="foot-col">
+          <h4>Help</h4>
+          <a href="#">Claim policy</a>
+          <a href="#">Privacy</a>
+          <a href="#">Contact the desk</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 RKGIT · STUDENT SERVICES</span>
+      <span>MADE WITH CARE ON CAMPUS</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Item detail modal -->
+<div class="overlay" id="itemOverlay" onclick="if(event.target===this)closeItem()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-img">
+      <button class="close-x" onclick="closeItem()" aria-label="Close">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="fallback" id="mFallback"></div>
+      <img id="mImg" src="" alt="">
+      <span class="badge" id="mBadge"></span>
+    </div>
+    <div class="modal-body">
+      <span class="mono" style="font-size:11px;letter-spacing:.12em;color:var(--ink-3)" id="mRef"></span>
+      <h3 id="mTitle"></h3>
+      <p class="desc" id="mDesc"></p>
+      <div class="meta-list">
+        <div class="meta-row"><span class="k">Location</span><span class="v" id="mLoc"></span></div>
+        <div class="meta-row"><span class="k">Reported</span><span class="v" id="mTime"></span></div>
+        <div class="meta-row"><span class="k">Category</span><span class="v" id="mCat"></span></div>
+        <div class="meta-row"><span class="k">Held at</span><span class="v" id="mHold"></span></div>
+      </div>
+      <div class="modal-actions">
+        <button class="pill-btn ghost" style="background:var(--bg);color:var(--ink)" onclick="closeItem()">Back</button>
+        <button class="pill-btn accent" id="mAction" style="flex:2"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Report modal -->
+<div class="overlay" id="reportOverlay" onclick="if(event.target===this)closeReport()">
+  <div class="modal report-modal" role="dialog" aria-modal="true" style="position:relative">
+    <button class="close-x" onclick="closeReport()" aria-label="Close">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <span class="mono" style="font-size:11px;letter-spacing:.12em;color:var(--ink-3)">NEW REPORT</span>
+    <h3>Report an item</h3>
+    <p class="sub">It takes about a minute. The more specific the location, the faster the match.</p>
+    <form onsubmit="submitReport(event)">
+      <div class="type-toggle">
+        <button type="button" id="tglLost" onclick="setReportType('lost')">
+          <div class="t"><span class="status-dot lost"></span>I lost something</div>
+          <div class="d">Post it so finders can reach you</div>
+        </button>
+        <button type="button" id="tglFound" class="sel-found" onclick="setReportType('found')">
+          <div class="t"><span class="status-dot found"></span>I found something</div>
+          <div class="d">Log it so the owner can claim it</div>
+        </button>
+      </div>
+      <div class="f-row"><label>Item name</label><input id="rTitle" required placeholder="e.g. Black wireless headphones"></div>
+      <div class="f-2">
+        <div class="f-row"><label>Category</label>
+          <select id="rCat">
+            <option>Electronics</option><option>Keys &amp; IDs</option><option>Wallets &amp; Bags</option>
+            <option>Clothing</option><option>Books &amp; Notes</option><option>Bottles &amp; Drinkware</option>
+            <option>Accessories</option><option>Other</option>
+          </select>
+        </div>
+        <div class="f-row"><label>Date</label><input id="rDate" type="date" required></div>
+      </div>
+      <div class="f-row"><label>Where</label><input id="rLoc" required placeholder="e.g. Central Library, Level 2"></div>
+      <div class="f-row"><label>Details</label><textarea id="rDesc" placeholder="Color, brand, distinguishing marks, anything a real owner would know…"></textarea></div>
+      <button class="pill-btn accent" type="submit">Post to the board</button>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
